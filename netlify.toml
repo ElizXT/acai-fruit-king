@@ -1,0 +1,32 @@
+[images]
+  remote_images = ["https://source.unsplash.com/.*", "https://images.unsplash.com/.*", "https://ext.same-assets.com/.*", "https://ugc.same-assets.com/.*"]
+
+[build]
+  command = "bun run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "18"
+  TZ = "America/Sao_Paulo"
+
+[functions]
+  node_bundler = "esbuild"
+
+[dev]
+  command = "bun run dev"
+  port = 3000
+  targetPort = 3000
+  framework = "nextjs"
+  publish = ".next"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://ext.same-assets.com blob:; font-src 'self' data:; connect-src 'self' https://ext.same-assets.com; frame-src 'self';"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
