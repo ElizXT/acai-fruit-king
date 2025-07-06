@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+const uuidv4 = () => crypto.randomUUID();
 import { toast } from 'sonner';
 import { CartItem, Product, Additional } from '@/lib/types';
 
