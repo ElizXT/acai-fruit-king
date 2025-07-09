@@ -10,7 +10,7 @@
   TZ = "America/Sao_Paulo"
 
 [functions]
-  node_bundler = "esbuild"
+  directory = "netlify/functions"
 
 [dev]
   command = "bun run dev"
