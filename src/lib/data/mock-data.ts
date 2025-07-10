@@ -1,11 +1,10 @@
 import { Category, DailyPromotion, Product, StoreInfo } from "../types";
-import combo-especial from '@/assets/images/placeholders/combo-especial.png'
 
 export const storeInfo: StoreInfo = {
   name: "Açaí Fruit King",
   isOpen: true,
   address: "Disponível na Sua Cidade!",
-  phone: "(13) 3262-9651",
+  phone: "(11) 3262-9651",
   openingHours: {
     Domingo: { open: "14:00", close: "23:59" },
     Segunda: { open: "15:00", close: "23:59" },
