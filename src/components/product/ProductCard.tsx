@@ -38,10 +38,20 @@ export default function ProductCard({ product, onAddToCart, onViewDetails }: Pro
           </Badge>
         )}
         <div className="relative h-40 w-full">
-          <div className="w-full h-full flex items-center justify-center bg-acai-primary/10">
-            <span className="text-acai-primary text-2xl font-bold">{product.name.split(' ')[0]}</span>
-          </div>
-        </div>
+  {product.image ? (
+    <Image
+      src={`/images/products/${product.image}`}
+      alt={product.name}
+      width={300}
+      height={160}
+      className="w-full h-full object-cover rounded-t-md"
+    />
+  ) : (
+    <div className="w-full h-full flex items-center justify-center bg-acai-primary/10">
+      <span className="text-acai-primary text-2xl font-bold">{product.name.split(' ')[0]}</span>
+    </div>
+  )}
+</div>
       </div>
 
       <CardContent className="p-4">
