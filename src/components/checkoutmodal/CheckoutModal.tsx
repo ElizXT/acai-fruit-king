@@ -38,20 +38,32 @@ export default function CheckoutModal({ isOpen, onClose, items, total }: Checkou
       }
       return crc.toString(16).toUpperCase().padStart(4, '0');
     }
-    function buildPixPayload({ key, name, city, amount, txid }: any) {
-      const gui   = emv('00', 'BR.GOV.BCB.PIX');
-      const k     = emv('01', key);
-      const mai   = emv('26', gui + k);
-      const mcc   = emv('52', '0000');
-      const curr  = emv('53', '986');
-      const amt   = (+amount > 0) ? emv('54', String(amount)) : '';
-      const ctry  = emv('58', 'BR');
-      const mname = emv('59', sanitize(name, 25) || 'LOJA');
-      const mcity = emv('60', sanitize(city, 15) || 'BRASIL');
-      const add   = emv('62', emv('05', txid || '***'));
+    interface PixPayload {
+  name: string;
+  city: string;
+  amount: number;
+  txid: string;
+}
 
-      const base = '000201' + mai + mcc + curr + amt + ctry + mname + mcity + add + '6304';
-      return base + crc16(base);
+function buildPixPayload({ name, city, amount, txid }: PixPayload) {
+  // chave Pix fixa
+  const key = '16999614758';
+
+  const gui = emv('00', 'BR.GOV.BCB.PIX');
+  const k = emv('01', key);
+  const mai = emv('26', gui + k);
+  const mcc = emv('52', '0000');
+  const curr = emv('53', '986');
+  const amt = (amount > 0) ? emv('54', String(amount)) : '';
+  const ctry = emv('58', 'BR');
+  const mname = emv('59', sanitize(name, 25) || 'LOJA');
+  const mcity = emv('60', sanitize(city, 15) || 'BRASIL');
+  const add = emv('62', emv('05', txid || '***'));
+
+  const base = '000201' + mai + mcc + curr + amt + ctry + mname + mcity + add + '6304';
+  return base + crc16(base);
+}
+
     }
 
     const amount = parseBRLToNumber(total).toFixed(2);
