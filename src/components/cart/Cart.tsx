@@ -16,8 +16,11 @@ import { formatCurrency } from '@/lib/utils';
 import { useCart } from '@/lib/context/cart-context';
 import { toast } from 'sonner';
 
+
+
 export default function Cart() {
   const [isOpen, setIsOpen] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
   const { cartItems, removeItem, updateQuantity, clearCart, totalItems, subtotal } = useCart();
 
   const handleRemoveItem = (id: string) => {
@@ -33,10 +36,9 @@ export default function Cart() {
   };
 
   const handleCheckout = () => {
-    toast.success('Pedido finalizado com sucesso!');
-    clearCart();
-    setIsOpen(false);
-  };
+  setCheckoutOpen(true);
+};
+
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -158,7 +160,7 @@ export default function Cart() {
 
               <div className="flex justify-between py-2">
                 <span className="text-sm">Taxa de entrega</span>
-                <span className="font-medium">Grátis</span>
+                <span className="font-medium">00,00</span>
               </div>
 
               <Separator className="my-2" />
@@ -184,7 +186,7 @@ export default function Cart() {
                 className="w-full mt-2"
                 onClick={() => setIsOpen(false)}
               >
-                Continuar comprando
+                Quero Continuar comprando
               </Button>
 
               <Button
@@ -198,6 +200,6 @@ export default function Cart() {
           </>
         )}
       </SheetContent>
-    </Sheet>
+     </Sheet>
   );
 }
