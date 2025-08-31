@@ -1,5 +1,5 @@
 'use client';
-
+import QRCode from "qrcode";
 import { useEffect, useState } from 'react';
 import type { CartItem } from '@/lib/types';
 
@@ -38,23 +38,21 @@ export default function CheckoutModal({ isOpen, onClose, items, total }: Checkou
       }
       return crc.toString(16).toUpperCase().padStart(4, '0');
     }
-    interface PixPayload {
-  name: string;
-  city: string;
-  amount: number;
-  txid: string;
-}
+type PixPayload = {
+  key: string;      // chave pix
+  name: string;     // nome do recebedor
+  city: string;     // cidade
+  amount: number;   // valor
+  txid: string;     // identificador único
+};
 
-function buildPixPayload({ name, city, amount, txid }: PixPayload) {
-  // chave Pix fixa
-  const key = '16999614758';
-
+function buildPixPayload({ key, name, city, amount, txid }: PixPayload): string {
   const gui = emv('00', 'BR.GOV.BCB.PIX');
   const k = emv('01', key);
   const mai = emv('26', gui + k);
   const mcc = emv('52', '0000');
   const curr = emv('53', '986');
-  const amt = (amount > 0) ? emv('54', String(amount)) : '';
+  const amt = (+amount > 0) ? emv('54', String(amount)) : '';
   const ctry = emv('58', 'BR');
   const mname = emv('59', sanitize(name, 25) || 'LOJA');
   const mcity = emv('60', sanitize(city, 15) || 'BRASIL');
@@ -64,16 +62,16 @@ function buildPixPayload({ name, city, amount, txid }: PixPayload) {
   return base + crc16(base);
 }
 
-    }
 
-    const amount = parseBRLToNumber(total).toFixed(2);
-    const payload = buildPixPayload({
-      key: '16999614758', // SUA CHAVE PIX
-      name: 'Acai Fruit King',
-      city: 'SAO PAULO',
-      amount,
-      txid: 'CHECKOUT' + Date.now().toString().slice(-6),
-    });
+const amount = parseBRLToNumber(total).toFixed(2);
+const payload = buildPixPayload({
+  key: '16999614758',
+  name: 'Acai Fruit King',
+  city: 'SAO PAULO',
+  amount: Number(amount),
+  txid: 'CHECKOUT' + Date.now().toString().slice(-6),
+});
+
 
     QRCode.toDataURL(payload, { width: 220, margin: 1 })
       .then(setQrCodeDataUrl)
